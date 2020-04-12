@@ -14,6 +14,7 @@ typedef struct {
 LinkedList* ll_init();
 
 int ll_push(LinkedList* list, char* str);
+int ll_peek(LinkedList *list, char* out);
 int ll_pop(LinkedList* list, char* out);
 
 void ll_dispose(LinkedList* list);

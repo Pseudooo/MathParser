@@ -1,6 +1,6 @@
 
 #include <stdlib.h>
-#include <sting.h>
+#include <string.h>
 
 #include "LinkedList.h"
 
@@ -54,6 +54,28 @@ int ll_push(LinkedList* list, char* str)
 	list->head = node;
 
 	list->length++;
+	return 1;
+
+}
+
+/**
+	Will let the user view the string at the head
+	1 - Success
+	0 - Empty List
+*/
+int ll_peek(LinkedList* list, char* out)
+{
+	
+	// Catch edge-case
+	if(list->length == 0)
+		return 0;
+
+	if(out != NULL)
+	{
+		Node* head = list->head;
+		strcpy(out, head->str);
+	}
+
 	return 1;
 
 }
