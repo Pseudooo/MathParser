@@ -4,7 +4,10 @@
 
 int main()
 {
+	printf("-----------------------------------");
+	/** is_number testing */
 	int result;
+	printf("\nTesting is_number\n\n");
 	printf("Is 5 a number?\n");
 	result = is_number("5");
 	if(result) {
@@ -44,6 +47,16 @@ int main()
 	} else {
 		printf("no\n");
 	}
+
+	printf("-----------------------------------");
+	/** from_str testing */
+	printf("\n\nTesting from_str\n\n");
+	printf("1 - Success\n0 - Invalid Number\n-1 - Empty String\n\n");
+	int dest;
+	printf("20 => %d\n", from_str("20", &dest));
+	printf("-5 => %d\n", from_str("-5", &dest));
+	printf("asdf => %d\n", from_str("asdf", &dest));
+	printf("\"\" => %d\n", from_str("", &dest));
 
 	return 1;
 }
