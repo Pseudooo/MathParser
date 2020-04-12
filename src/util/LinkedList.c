@@ -76,7 +76,8 @@ int ll_pop(LinkedList* list, char* out)
 	list->head = to_des->next;
 
 	list->length--;
-	strcpy(out, to_des->str);
+	if(out != NULL)
+		strcpy(out, to_des->str);
 
 	// Clear from memory
 	free(to_des->str);
@@ -89,6 +90,11 @@ int ll_pop(LinkedList* list, char* out)
 void ll_dispose(LinkedList* list)
 {
 
-	// ...
+	// Popping elements frees them from memory
+	while(list->length > 0)
+		ll_pop(list, NULL);
+
+	// Free list
+	free(list);
 
 }
