@@ -6,7 +6,8 @@
 int main()
 {
 
-	printf("Initializing list\n");
+	// ************ LIST  INITIALIZATION
+	printf(" *** Initializing List\n");
 	LinkedList* list = ll_init();
 	if(list == NULL)
 	{
@@ -17,18 +18,42 @@ int main()
 
 	char out[256];
 
-	printf("Pushing \"one\"\n");
-	ll_push(list, "one"); ll_peek(list, out);
-	printf("New Head: %s\n", out);
+	// ************ PUSHING VALUES
+	char* arr[] = {"one", "two", "three", "four", "five"};
+	for(int i = 0; i < 5; i++)
+	{
+		char* str = arr[i];
 
-	printf("Pushing \"two\"\n");
-	ll_push(list, "two"); ll_peek(list, out);
-	printf("New Head: %s\n", out);
+		// Attempt push of value
+		printf("Attempting to push: %s\n", str);
+		ll_push(list, str);
 
-	printf("Pushing \"tre\"\n");
-	ll_push(list, "tre"); ll_peek(list, out);
-	printf("New Head: %s\n", out);
+		// Output new head
+		ll_peek(list, out);
+		printf("Updated Head is: %s\n\n", out);
 
+	}
+
+	// Padding
+	printf("\n");
+
+
+	// ************ DISPLAYING CURRENT LIST
+	printf("Current List is:\n");
+	Node* cur = list->head;
+	while(cur != NULL)
+	{
+		printf("%s", cur->str);
+		if(cur->next != NULL)
+		{
+			printf(" -> ");
+		}
+		else printf("\n\n");
+		cur = cur->next;
+	}
+
+
+	// ************ POPPING VALUES
 	printf("Popping all values...\n");
 	while(list->length > 0)
 	{
