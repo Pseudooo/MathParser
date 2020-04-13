@@ -48,6 +48,14 @@ int main()
 		printf("no\n");
 	}
 
+	printf("Is '' a number?\n");
+	result = is_number("");
+	if(result) {
+		printf("yes\n");
+	} else {
+		printf("no\n");
+	}
+
 	printf("-----------------------------------");
 	/** from_str testing */
 	printf("\n\nTesting from_str\n\n");
