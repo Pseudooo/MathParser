@@ -67,5 +67,17 @@ int main()
 	printf("\"\" => %d\n", from_str("", &dest));
 	printf("- => %d\n", from_str("-", &dest));
 
+	/** to_str testing */
+	printf("\n\nTesting to_str\n\n");
+	for(int i = -8; i < 8; i++)
+	{
+		int val = i*i*i;
+		printf("Converting %d to string\n", val);
+		char str[32];
+		to_str(val, str);
+		printf("String: %s\n", str);
+
+	}
+
 	return 1;
 }
