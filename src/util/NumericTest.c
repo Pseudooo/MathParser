@@ -57,6 +57,7 @@ int main()
 	printf("-5 => %d\n", from_str("-5", &dest));
 	printf("asdf => %d\n", from_str("asdf", &dest));
 	printf("\"\" => %d\n", from_str("", &dest));
+	printf("- => %d\n", from_str("-", &dest));
 
 	return 1;
 }

@@ -35,6 +35,9 @@ int from_str(char* str, int* dest)
     if(str == NULL || str[0] == 0)
         return -1;
 
+    if(str[0] == '-' && str[1] == 0)
+        return 0;
+
     int s = str[0] == '-' ? 1 : 0;
     char* cur = str+s; int out = 0;
     while(*cur != 0)
