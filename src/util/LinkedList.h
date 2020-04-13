@@ -1,7 +1,7 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-typedef struct {
+typedef struct Node {
 	struct Node* next;
 	char* str;
 } Node;
