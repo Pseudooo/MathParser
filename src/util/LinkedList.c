@@ -40,7 +40,7 @@ int ll_push(LinkedList* list, char* str)
 
 	// Attempt allocation of data
 	Node* node = malloc(sizeof(Node));
-	char* node_str = malloc(len);
+	char* node_str = calloc(1, len + 1);
 	if(node == NULL || str == NULL)
 		return 0; // Failed to allocate
 
@@ -107,6 +107,14 @@ int ll_pop(LinkedList* list, char* out)
 
 	return 1;
 
+}
+
+/**
+	Will determine if the provided list is empty or not
+*/
+int ll_isempty(LinkedList* list)
+{
+	return list->head == NULL;
 }
 
 void ll_dispose(LinkedList* list)

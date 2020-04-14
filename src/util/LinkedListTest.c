@@ -16,6 +16,8 @@ int main()
 	}
 	else printf("Done!\n");
 
+	printf("ll_isempty() => %d\n", ll_isempty(list));
+
 	char out[256];
 
 	// ************ PUSHING VALUES
@@ -33,6 +35,8 @@ int main()
 		printf("Updated Head is: %s\n\n", out);
 
 	}
+
+	printf("ll_isempty() => %d\n", ll_isempty(list));
 
 	// Padding
 	printf("\n");
@@ -52,7 +56,6 @@ int main()
 		cur = cur->next;
 	}
 
-
 	// ************ POPPING VALUES
 	printf("Popping all values...\n");
 	while(list->length > 0)
@@ -60,6 +63,8 @@ int main()
 		ll_pop(list, out);
 		printf("Popped: %s\n", out);
 	}
+
+	printf("ll_isempty() => %d\n", ll_isempty(list));
 
 	return 1;
 
