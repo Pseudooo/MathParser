@@ -32,6 +32,7 @@ int eval_postfix(const char* postfix_expr, int* dest)
 
 	LinkedList* stack = ll_init();
 
+	// Make a "local" copy of the string to tokenize
 	char str[strlen(postfix_expr) + 1];
 	strcpy(str, postfix_expr);
 
@@ -70,6 +71,9 @@ int eval_postfix(const char* postfix_expr, int* dest)
 	char final[16];
 	ll_pop(stack, final);
 	from_str(final, dest);
+
+	// Free stack from memory
+	ll_dispose(stack);
 
 	return 1;
 
