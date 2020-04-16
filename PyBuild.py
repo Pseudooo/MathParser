@@ -14,6 +14,7 @@ def main():
 		# Eval cmd args
 		cmd, args = args[0], args[1:]
 		execCommand(cmd, args, depends)
+		saveFile(depends) # Potential change
 		return
 
 	while True:
@@ -162,14 +163,19 @@ def execCommand(cmd, args, depends):
 			print("That file has not been registered yet!")
 		else:
 
+			# A file needs itself to be compiled - duh
 			depsList = set([args[0]])
-
+			
 			toCheck = depends[args[0]]
 			while toCheck != []:
+
 				cur = toCheck[0]
 
 				if cur not in depsList:
 					depsList.add(cur)
+
+					# Include chained-depends
+					toCheck.extend(depends[cur])
 
 				# shrink queue
 				toCheck = toCheck[1:]
