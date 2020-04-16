@@ -24,7 +24,7 @@ def main():
 		if inp == "q":
 			print("Goodbye!")
 			break
-		elif all(map(str.isspace, inp)):
+		elif not inp or inp.isspace():
 			continue
 
 		# Break up cmd and arguments
@@ -165,8 +165,8 @@ def execCommand(cmd, args, depends):
 
 			# A file needs itself to be compiled - duh
 			depsList = set([args[0]])
-			
-			toCheck = depends[args[0]]
+
+			toCheck = depends[args[0]][:]
 			while toCheck != []:
 
 				cur = toCheck[0]
@@ -181,7 +181,7 @@ def execCommand(cmd, args, depends):
 				toCheck = toCheck[1:]
 
 			print("Building...")
-			sp.run(["gcc", "-o", f"{args[0][:-2]}.exe"] + list(depsList))
+			sp.run(["gcc", "-o", f"{args[0].split('/')[-1][:-2]}.exe"] + list(depsList))
 
 if __name__ == "__main__":
 	main()
