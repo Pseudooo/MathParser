@@ -57,3 +57,38 @@ int from_str(char* str, int* dest)
     *dest = out;
     return 1;
 }
+
+/**
+    Given an integer value this function will create a string
+    representation of it and place it in the given `dest`
+*/
+void to_str(int x, char* dest)
+{
+
+    int neg = x < 0 ? 1 : 0;
+    if(neg) x *= -1;
+
+    char buff[32]; int idx = 30;
+    buff[31] = 0;
+    do{
+        char offset = x % 10;
+        buff[idx] = '0' + offset;
+        x -= offset;
+        x /= 10;
+        idx--;
+    }while(x > 0);
+
+    if(neg)
+        buff[idx] = '-';
+    else
+        idx++;
+
+    char* new = buff+idx;
+    for(int i = 0;;i++)
+    {
+        dest[i] = new[i];
+        if(new[i] == 0)
+            break;
+    }
+
+}
