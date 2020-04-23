@@ -39,7 +39,7 @@ def loadFile(depends:dict):
 
 	# Attempt tor read from the file
 	try:
-		with open("pybuild.depends", "r") as f:
+		with open('pybuild.depends', 'r') as f:
 
 			# Read from file	
 			content = f.read().split("\n")
@@ -181,7 +181,7 @@ def execCommand(cmd, args, depends):
 				toCheck = toCheck[1:]
 
 			print("Building...")
-			sp.run(["gcc", "-o", f"{args[0].split('/')[-1][:-2]}.exe"] + list(depsList))
+			sp.run(["gcc", "-o", f"build/{args[0].split('/')[-1][:-2]}.exe"] + list(depsList))
 
 if __name__ == "__main__":
 	main()
