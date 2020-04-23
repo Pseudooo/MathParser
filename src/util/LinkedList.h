@@ -3,21 +3,27 @@
 
 typedef struct Node {
 	struct Node* next;
-	char* str;
+	size_t alloc;
+	void* payload;
 } Node;
 
 typedef struct {
 	struct Node* head;
+	struct Node* tail;
 	int length;
 } LinkedList;
 
 LinkedList* ll_init();
 
-int ll_push(LinkedList* list, char* str);
-int ll_peek(LinkedList *list, char* out);
-int ll_pop(LinkedList* list, char* out);
-int ll_isempty(LinkedList* list);
+int ll_push(LinkedList* list, void* src, size_t n);
+int ll_pop(LinkedList* list, void* dest);
 
+int ll_peek(LinkedList *list, void* dest);
+int ll_peek_size(LinkedList* list);
+
+int ll_append(LinkedList* list, void* src, size_t n);
+
+int ll_isempty(LinkedList* list);
 void ll_dispose(LinkedList* list);
 
 #endif

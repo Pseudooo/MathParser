@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <string.h>
 
 #include "../src/util/LinkedList.h"
 
@@ -28,13 +29,14 @@ int main()
 
 		// Attempt push of value
 		printf("Attempting to push: %s\n", str);
-		ll_push(list, str);
+		ll_push(list, str, (int) strlen(str) + 1);
 
 		// Output new head
 		ll_peek(list, out);
 		printf("Updated Head is: %s\n\n", out);
 
 	}
+
 
 	printf("ll_isempty() => %d\n", ll_isempty(list));
 
@@ -47,7 +49,7 @@ int main()
 	Node* cur = list->head;
 	while(cur != NULL)
 	{
-		printf("%s", cur->str);
+		printf("%s", cur->payload);
 		if(cur->next != NULL)
 		{
 			printf(" -> ");
