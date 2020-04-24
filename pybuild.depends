@@ -1,6 +1,7 @@
 src/util/LinkedList.c=
 src/util/Numeric.c=
-test/LinkedListTest.c=src/util/LinkedList.c
+test/LinkedListTest.c=src/util/LinkedList.c,test/Test.c
 test/NumericTest.c=src/util/Numeric.c
 src/Evaluator.c=src/util/LinkedList.c,src/util/Numeric.c
 test/EvaluatorTest.c=src/Evaluator.c
+test/Test.c=

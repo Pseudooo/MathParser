@@ -3,71 +3,40 @@
 #include <string.h>
 
 #include "../src/util/LinkedList.h"
+#include "Test.h"
+
+void test_append();
 
 int main()
 {
 
-	// ************ LIST  INITIALIZATION
-	printf(" *** Initializing List\n");
+	test_append();
+
+}
+
+void test_append()
+{
+
+	const int n = 16;
+	init_test_suite(2 * n, "Append", "Testing Functionality of append utilities");
+
+	// Initialize list to perform tests on
 	LinkedList* list = ll_init();
-	if(list == NULL)
+	size_t elem_size = 4;
+
+	// Attempt to `append` 64 values
+	for(int i = 0; i < n; i++)
 	{
-		printf("Failed to allocate!\n");
-		return 1;
-	}
-	else printf("Done!\n");
-
-	printf("ll_isempty() => %d\n", ll_isempty(list));
-
-	char out[256];
-
-	// ************ PUSHING VALUES
-	char* arr[] = {"one", "two", "three", "four", "five"};
-	for(int i = 0; i < 5; i++)
-	{
-		char* str = arr[i];
-
-		// Attempt push of value
-		printf("Attempting to push: %s\n", str);
-		ll_push(list, str, (int) strlen(str) + 1);
-
-		// Output new head
-		ll_peek(list, out);
-		printf("Updated Head is: %s\n\n", out);
-
+		int val = i*i;
+		ll_append(list, &val, elem_size);
+		
+		// Ensure list is 
+		assert_eq_int(val, * (int*) list->tail->payload);
+		assert_eq_int(i + 1, list->length);
 	}
 
-
-	printf("ll_isempty() => %d\n", ll_isempty(list));
-
-	// Padding
-	printf("\n");
-
-
-	// ************ DISPLAYING CURRENT LIST
-	printf("Current List is:\n");
-	Node* cur = list->head;
-	while(cur != NULL)
-	{
-		printf("%s", cur->payload);
-		if(cur->next != NULL)
-		{
-			printf(" -> ");
-		}
-		else printf("\n\n");
-		cur = cur->next;
-	}
-
-	// ************ POPPING VALUES
-	printf("Popping all values...\n");
-	while(list->length > 0)
-	{
-		ll_pop(list, out);
-		printf("Popped: %s\n", out);
-	}
-
-	printf("ll_isempty() => %d\n", ll_isempty(list));
-
-	return 1;
+	// Clear list from memory
+	ll_dispose(list);
+	terminate_test_suite();
 
 }
