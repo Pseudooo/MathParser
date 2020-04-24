@@ -164,13 +164,12 @@ int ll_append(LinkedList* list, void* src, size_t n)
 
 	// Link node into list
 	if(list -> length == 0)
-	{
-		// Empty list links to head & tail
 		list->head = node;
-		list->tail = node;
-	}
-	else list->tail->next = node;
+	else 
+		list->tail->next = node;
+	list->tail = node;
 
+	list->length++;
 	return 1;
 
 }
