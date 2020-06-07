@@ -11,6 +11,12 @@ char* _desc;
 void init_test_suite(int total_cases, char* name, char* desc)
 {
 
+	// Setup test environment
+	TEST_CASES = total_cases;
+	TEST_CASE = 0;
+	_name = name;
+	_desc = desc;
+
 	// Print test message
 	printf(" * * * \n");
 	printf(" * * * STARTING NEW TEST SUITE\n");
@@ -18,12 +24,6 @@ void init_test_suite(int total_cases, char* name, char* desc)
 	printf(" * * * Description: %s\n", _desc);;
 	printf(" * * * Tests: %d\n", total_cases);
 	printf(" * * * \n");
-
-	// Setup test environment
-	TEST_CASES = total_cases;
-	TEST_CASE = 0;
-	_name = name;
-	_desc = desc;
 
 }
 
@@ -57,8 +57,8 @@ void assert_eq_str(char* exp, char* act)
 
 	Failure:
 	printf(" * * * FAILURE\n");
-	printf(" * * * Expected: %d\n", exp);
-	printf(" * * * Actual: %d\n", act);
+	printf(" * * * Expected: %s\n", exp);
+	printf(" * * * Actual: %s\n", act);
 
 }
 
