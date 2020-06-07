@@ -67,7 +67,7 @@ int from_str(char* str)
     }
 
     // Make output negative if str started with '-'
-    out *= s ? -1 : 1;
+    out *= start ? -1 : 1;
     return out;
 }
 
