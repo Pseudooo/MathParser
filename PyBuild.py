@@ -21,7 +21,7 @@ def main():
 
 		# Catch whitespace and quit
 		inp = input("~ ")
-		if inp == "q":
+		if inp in ("q", "quit"):
 			print("Goodbye!")
 			break
 		elif not inp or inp.isspace():
