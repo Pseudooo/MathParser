@@ -6,7 +6,7 @@
     1 - Input is a number
     0 - Input is not a number
 */
-int is_number(char* str)
+int is_integer(char* str)
 {
 
     // Check if the given string is empty/null
