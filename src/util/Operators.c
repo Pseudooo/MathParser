@@ -2,6 +2,10 @@
 #include "Operators.h"
 #include <string.h>
 
+const int OPERATOR_COUNT = 4;
+const char* OPERATOR_STR[] = {"+", "-", "*", "/"};
+const int (*ops[]) (int x1, int x2) = {ADD, SUB, MUL, DIV};
+
 /*
     Check if a given string is an operator or not, will
     return a truthy integer

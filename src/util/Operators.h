@@ -8,8 +8,8 @@ int SUB(int x1, int x2);
 int MUL(int x1, int x2);
 int DIV(int x1, int x2);
 
-const int OPERATOR_COUNT = 4;
-const char* OPERATOR_STR[] = {"+", "-", "*", "/"};
-const (*ops[]) (int x1, int x2) = {ADD, SUB, MUL, DIV};
+extern const int OPERATOR_COUNT;
+extern const char* OPERATOR_STR[];
+extern const int (*ops[]) (int x1, int x2);
 
 #endif
