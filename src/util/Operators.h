@@ -1,16 +1,10 @@
 #ifndef OPERATORS_H
 #define OPERATORS_H
 
-int is_operator(char* str);
-int evaluate_operator(char* op, int x1, int x2);
-
-int ADD(int x1, int x2);
-int SUB(int x1, int x2);
-int MUL(int x1, int x2);
-int DIV(int x1, int x2);
+int is_operator(const char* str);
+int evaluate_operator(const char* op, int x1, int x2);
 
 extern const int OPERATOR_COUNT;
 extern const char* OPERATOR_STR[];
-extern const int (*ops[]) (int x1, int x2);
 
 #endif
