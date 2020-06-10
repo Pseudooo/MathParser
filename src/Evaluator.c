@@ -1,157 +1,102 @@
-#include "Evaluator.h"
 
 #include <string.h>
-#include <math.h>
-
-#include "util/Numeric.h"
-#include "util/LinkedList.h"
-
 #include <stdio.h>
 
-int is_operator(char* str);
-void perform_operation(LinkedList* stack, char* op);
+#include "Evaluator.h"
 
-int ADD(int x1, int x2);
-int SUB(int x1, int x2);
-int MUL(int x1, int x2);
-int DIV(int x1, int x2);
-int EXP(int x1, int x2);
+#include "util/Numeric.h"
+#include "util/Operators.h"
+#include "util/LinkedList.h"
 
-const int OP_COUNT = 5;
-const char* ops_str[] = {"+", "-", "*", "/", "^"};
-const int (*ops[]) (int x1, int x2) = {ADD, SUB, MUL, DIV, EXP};
+int perform_operation(LinkedList* stack, char* op);
 
-/**
-	Will evaluate a provided postfix expression and place
-	the result into the integer located at `dest`
-	1 -> Success
-	0 -> Invalid Token encountered
-*/
 int eval_postfix(const char* postfix_expr, int* dest)
 {
 
 	LinkedList* stack = ll_init();
 
-	// Make a "local" copy of the string to tokenize
+	// Make a local copy of the expression to tokenize
 	char str[strlen(postfix_expr) + 1];
 	strcpy(str, postfix_expr);
 
-	// Iter over all tokens (terms)
 	char* token = strtok(str, " ");
 	while(token != NULL)
-	{	
-		
-		if(is_number(token))
+	{
+		if(is_integer(token))
 		{
-			// All numbers just get pushed to the stack
-			ll_push(stack, token);
+			int value = from_str(token);
+
+			// Map value to array initialized with a 0
+			char buffer[5]; buffer[0] = 0;
+			for(int i = 0; i < 4; i++)
+        		buffer[i + 1] = *(((char*) &value) + i);
+
+			ll_push(stack, buffer, 5);
 		}
 		else if(is_operator(token))
 		{
-			// Operators must be evaluated with top 2 stack values
+			// Operators are performed on the stack
 			perform_operation(stack, token);
 		}
 		else
-		{
-			// Invalid Token reached
+		{	
+			// Invalid Token encountered
 			return 0;
 		}
 
-		// Continue to next token
 		token = strtok(NULL, " ");
 	}
 
 	if(stack->length != 1)
-	{
-		// Stack should only have one element after successful eval
 		return 0;
-	}
 
-	// Migrate result to `dest` 
-	char final[16];
-	ll_pop(stack, final);
-	from_str(final, dest);
-
-	// Free stack from memory
+	char buffer[5];
+	ll_pop(stack, buffer);
 	ll_dispose(stack);
 
+	int result = *(int*) (buffer + 0x1);
+	*dest = result;
 	return 1;
 
 }
 
-/**
-	Will determine if a provided string is an operator or not
-*/
-int is_operator(char* str)
+int perform_operation(LinkedList* stack, char* op)
 {
 
-	// Perform linear search on operator list
-	for(int i = 0; i < OP_COUNT; i++)
-		if(strcmp(str, ops_str[i]) == 0)
-			return 1;
+	// printf("Performing operation: %s\n", op);
 
-	return 0;
+	// Values are taken off stack backwards
+	char val2[ll_peek_size(stack)];
+	ll_pop(stack, val2);
 
-}
+	char val1[ll_peek_size(stack)];
+	ll_pop(stack, val1);
 
-/**
-	Given an operator as a string perform that operation
-	on the values currently retained in the stack
-*/
-void perform_operation(LinkedList* stack, char* op)
-{
+	// printf("Arr1: ");
+	// for(int i = 0; i < 5; i++)
+	// 	printf("%02X ", val1[i]);
+	// printf("\n\n");
 
-	// init vars
-	int x1, x2;
-	char buff[16];
+	// printf("Arr2: ");
+	// for(int i = 0; i < 5; i++)
+	// 	printf("%02X ", val2[i]);
+	// printf("\n");
 
-	// Take x1 & x2 from the stack
-	ll_pop(stack, buff); from_str(buff, &x2);
-	ll_pop(stack, buff); from_str(buff, &x1);
+	// Ensure both values are integer values
+	if(val1[0] == 1 || val2[0] == 1)
+		return 0; // Invalid stack
 
-	// Find index for given operation
-	int ans;
-	for(int i = 0; i < OP_COUNT; i++)
-	{
-		if(strcmp(op, ops_str[i]) == 0)
-		{
-			// Operation found, compute and add to stack
-			ans = ops[i](x1, x2);
-			break;
-		}
-	}
+	int x1 = *(int*) (val1 + 0x1);
+	int x2 = *(int*) (val2 + 0x1);
+	int ans = evaluate_operator(op, x1, x2);
 
-	// Push result back to stack
-	to_str(ans, buff);
-	ll_push(stack, buff);
+	// printf("x1 = %d\nx2 = %d\nanswer = %d\n", x1, x2, ans);
 
-}
+	char buffer[5]; buffer[0] = 0;
+	for(int i = 0; i < 4; i++)
+		buffer[i + 1] = *(((char*) &ans) + i);
 
-/**
-	The following are the definitions for the operation functions
-*/
+	ll_push(stack, buffer, 5);
+	return 1;
 
-int ADD(int x1, int x2)
-{
-	return x1 + x2;
-}
-
-int SUB(int x1, int x2)
-{
-	return x1 - x2;
-}
-
-int MUL(int x1, int x2)
-{
-	return x1 * x2;
-}
-
-int DIV(int x1, int x2)
-{
-	return x1 / x2;
-}
-
-int EXP(int x1, int x2)
-{
-	return (int) pow(x1, x2);
 }
