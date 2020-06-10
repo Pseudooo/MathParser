@@ -32,13 +32,7 @@ int eval_postfix(const char* postfix_expr, int* dest)
 		if(is_integer(token))
 		{
 			int value = from_str(token);
-
-			// Map value to array initialized with a 0
-			char buffer[5]; buffer[0] = 0;
-			for(int i = 0; i < 4; i++)
-        		buffer[i + 1] = *(((char*) &value) + i);
-
-			ll_push(stack, buffer, 5);
+			ll_push(stack, &value, 4);
 		}
 		// All operators are to be performed on the stack
 		else if(is_operator(token))
@@ -61,12 +55,10 @@ int eval_postfix(const char* postfix_expr, int* dest)
 		return -1;
 
 	// Take result from stack and clear it
-	char buffer[5];
-	ll_pop(stack, buffer);
+	int result;
+	ll_pop(stack, &result);
 	ll_dispose(stack);
 
-	// Extract integer value from stack
-	int result = *(int*) (buffer + 0x1);
 	*dest = result;
 
 	return 1;
@@ -85,26 +77,14 @@ int perform_operation(LinkedList* stack, char* op)
 	if(stack->length < 2)
 		return 0;
 
-	// Values are taken off stack backwards
-	char val2[5];
-	ll_pop(stack, val2);
-
-	char val1[5];
-	ll_pop(stack, val1);
-
-	// Take both integer values from arrays
-	int x1 = *(int*) (val1 + 0x1);
-	int x2 = *(int*) (val2 + 0x1);
+	int x1, x2;
+	ll_pop(stack, &x2);
+	ll_pop(stack, &x1);
 
 	// Compute answer given string operator
 	int ans = evaluate_operator(op, x1, x2);
 
-	// Map answer to new array to be pushed to stack
-	char buffer[5]; buffer[0] = 0;
-	for(int i = 0; i < 4; i++)
-		buffer[i + 1] = *(((char*) &ans) + i);
-
-	ll_push(stack, buffer, 5);
+	ll_push(stack, &ans, 4);
 	return 1;
 
 }
