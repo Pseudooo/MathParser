@@ -6,7 +6,6 @@
 
 #include "util/Numeric.h"
 #include "util/Operators.h"
-#include "util/LinkedList.h"
 
 int perform_operation(LinkedList* stack, char* op);
 
