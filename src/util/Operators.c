@@ -2,6 +2,11 @@
 #include "Operators.h"
 #include <string.h>
 
+int ADD(int x1, int x2);
+int SUB(int x1, int x2);
+int MUL(int x1, int x2);
+int DIV(int x1, int x2);
+
 const int OPERATOR_COUNT = 4;
 const char* OPERATOR_STR[] = {"+", "-", "*", "/"};
 const int (*ops[]) (int x1, int x2) = {ADD, SUB, MUL, DIV};
@@ -10,7 +15,7 @@ const int (*ops[]) (int x1, int x2) = {ADD, SUB, MUL, DIV};
     Check if a given string is an operator or not, will
     return a truthy integer
 */
-int is_operator(char* str)
+int is_operator(const char* str)
 {
 
     // Iterate over operators list and check if they equal
@@ -30,7 +35,7 @@ int is_operator(char* str)
 
     Operator string is assumed to be valid
 */
-int evaluate_operator(char* op, int x1, int x2)
+int evaluate_operator(const char* op, int x1, int x2)
 {
     for(int i = 0; i < OPERATOR_COUNT; i++)
         if(strcmp(op, OPERATOR_STR[i]) == 0)
