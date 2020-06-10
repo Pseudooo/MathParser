@@ -2,6 +2,7 @@
 #define OPERATORS_H
 
 int is_operator(char* str);
+int evaluate_operator(char* op, int x1, int x2);
 
 int ADD(int x1, int x2);
 int SUB(int x1, int x2);

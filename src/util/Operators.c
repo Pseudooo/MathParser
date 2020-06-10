@@ -24,6 +24,20 @@ int is_operator(char* str)
 
 }
 
+/*
+    Given an operator string and two values will
+    perform the given operation.
+
+    Operator string is assumed to be valid
+*/
+int evaluate_operator(char* op, int x1, int x2)
+{
+    for(int i = 0; i < OPERATOR_COUNT; i++)
+        if(strcmp(op, OPERATOR_STR[i]) == 0)
+            return ops[i](x1, x2);
+    return 0;    
+}
+
 // * * * * * * * * * * * * * 
 // All operators are defined below
 
