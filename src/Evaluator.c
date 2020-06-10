@@ -10,6 +10,13 @@
 
 int perform_operation(LinkedList* stack, char* op);
 
+/*
+	Function to evaluate a given postfix expression
+	result will be placed in dest
+		0 -> Invalid Token
+		1 -> Successful evaluation
+	   -1 -> Invalid Expression
+*/
 int eval_postfix(const char* postfix_expr, int* dest)
 {
 
@@ -22,6 +29,7 @@ int eval_postfix(const char* postfix_expr, int* dest)
 	char* token = strtok(str, " ");
 	while(token != NULL)
 	{
+		// All integer valuesare added to the stack
 		if(is_integer(token))
 		{
 			int value = from_str(token);
@@ -33,65 +41,66 @@ int eval_postfix(const char* postfix_expr, int* dest)
 
 			ll_push(stack, buffer, 5);
 		}
+		// All operators are to be performed on the stack
 		else if(is_operator(token))
 		{
-			// Operators are performed on the stack
-			perform_operation(stack, token);
+			if(!perform_operation(stack, token))
+				return -1;
 		}
+		// Non-integers and non-operators are invalid tokens
 		else
-		{	
-			// Invalid Token encountered
+		{
 			return 0;
 		}
 
+		// Next token
 		token = strtok(NULL, " ");
 	}
 
+	// Stack should only contain final result
 	if(stack->length != 1)
-		return 0;
+		return -1;
 
+	// Take result from stack and clear it
 	char buffer[5];
 	ll_pop(stack, buffer);
 	ll_dispose(stack);
 
+	// Extract integer value from stack
 	int result = *(int*) (buffer + 0x1);
 	*dest = result;
+
 	return 1;
 
 }
 
+/*
+	Helper function to perform a given operator on the
+	stack
+		0 -> Invalid Stack
+		1 -> Successful Operation
+*/
 int perform_operation(LinkedList* stack, char* op)
 {
 
-	// printf("Performing operation: %s\n", op);
+	if(stack->length < 2)
+		return 0;
 
 	// Values are taken off stack backwards
-	char val2[ll_peek_size(stack)];
+	char val2[5];
 	ll_pop(stack, val2);
 
-	char val1[ll_peek_size(stack)];
+	char val1[5];
 	ll_pop(stack, val1);
 
-	// printf("Arr1: ");
-	// for(int i = 0; i < 5; i++)
-	// 	printf("%02X ", val1[i]);
-	// printf("\n\n");
-
-	// printf("Arr2: ");
-	// for(int i = 0; i < 5; i++)
-	// 	printf("%02X ", val2[i]);
-	// printf("\n");
-
-	// Ensure both values are integer values
-	if(val1[0] == 1 || val2[0] == 1)
-		return 0; // Invalid stack
-
+	// Take both integer values from arrays
 	int x1 = *(int*) (val1 + 0x1);
 	int x2 = *(int*) (val2 + 0x1);
+
+	// Compute answer given string operator
 	int ans = evaluate_operator(op, x1, x2);
 
-	// printf("x1 = %d\nx2 = %d\nanswer = %d\n", x1, x2, ans);
-
+	// Map answer to new array to be pushed to stack
 	char buffer[5]; buffer[0] = 0;
 	for(int i = 0; i < 4; i++)
 		buffer[i + 1] = *(((char*) &ans) + i);
