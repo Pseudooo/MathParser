@@ -1,83 +1,70 @@
 #include <stdio.h>
 
 #include "../src/util/Numeric.h"
+#include "Test.h"
+
+void test_is_integer();
+void test_from_str();
+void test_to_str();
 
 int main()
 {
-	printf("-----------------------------------");
-	/** is_number testing */
-	int result;
-	printf("\nTesting is_number\n\n");
-	printf("Is 5 a number?\n");
-	result = is_number("5");
-	if(result) {
-		printf("yes\n");
-	} else {
-		printf("no\n");
-	}
 
-	printf("Is -5 a number?\n");
-	result = is_number("-5");
-	if(result) {
-		printf("yes\n");
-	} else {
-		printf("no\n");
-	}
+	test_is_integer();
+	test_from_str();
 
-	printf("Is - a number?\n");
-	result = is_number("-");
-	if(result) {
-		printf("yes\n");
-	} else {
-		printf("no\n");
-	}
+}
 
-	printf("Is 0 a number?\n");
-	result = is_number("0");
-	if(result) {
-		printf("yes\n");
-	} else {
-		printf("no\n");
-	}
+void test_is_integer()
+{
 
-	printf("Is s a number?\n");
-	result = is_number("s");
-	if(result) {
-		printf("yes\n");
-	} else {
-		printf("no\n");
-	}
+	const int n = 20;
+	init_test_suite(n, "Integer Validation", "Check if provided string is a valid integer");
 
-	printf("Is '' a number?\n");
-	result = is_number("");
-	if(result) {
-		printf("yes\n");
-	} else {
-		printf("no\n");
-	}
+	// Check a set of known valid values                                                         B)
+	char* valid_values[] = {"-123", "0123", "123", "-1", "-0", "0", "9", "0000123", "001200", "420"};
+	for(int i = 0; i < 10; i++) // Will return 1 for valid int
+		assert_eq_int(1, is_integer(valid_values[i]));
 
-	printf("-----------------------------------");
-	/** from_str testing */
-	printf("\n\nTesting from_str\n\n");
-	printf("1 - Success\n0 - Invalid Number\n-1 - Empty String\n\n");
-	int dest;
-	printf("20 => %d\n", from_str("20", &dest));
-	printf("-5 => %d\n", from_str("-5", &dest));
-	printf("asdf => %d\n", from_str("asdf", &dest));
-	printf("\"\" => %d\n", from_str("", &dest));
-	printf("- => %d\n", from_str("-", &dest));
+	char* invalid_values[] = {"foo", "bar", "-", "1234f", "-1234f", "pp", "-f6", "help", "me", "pl0x"};
+	for(int i = 0; i < 10; i++)
+		assert_eq_int(0, is_integer(invalid_values[i]));
 
-	/** to_str testing */
-	printf("\n\nTesting to_str\n\n");
-	for(int i = -8; i < 8; i++)
+	terminate_test_suite();
+
+}
+
+void test_from_str()
+{
+
+	const int n = 6;
+	init_test_suite(n, "Parsing Integers", "Parsing a string representation of an integer");
+	//                                             B)
+	char* str_values[] = {"-123", "123", "0123", "420", "-8008512", "-0123"};
+	int int_values[] = {-123, 123, 123, 420, -8008512, -123};
+	for(int i = 0; i < n; i++)
+		assert_eq_int(int_values[i], from_str(str_values[i]));
+
+	terminate_test_suite();
+
+}
+
+void test_to_str()
+{
+
+	const int n = 5;
+	init_test_suite(n, "Stringifying Integers", "Converting an Integer to a string");
+
+	int int_values[] = {-123, 123, 420, -999999, 0};
+	char* str_values[] = {"-123", "123", "420", "-999999", "0"};
+	for(int i = 0; i < n; i++)
 	{
-		int val = i*i*i;
-		printf("Converting %d to string\n", val);
 		char str[32];
-		to_str(val, str);
-		printf("String: %s\n", str);
+		to_str(int_values[i], str);
 
+		assert_eq_str(str_values[i], str);
 	}
 
-	return 1;
+	terminate_test_suite();
+
 }

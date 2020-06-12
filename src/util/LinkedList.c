@@ -18,6 +18,7 @@ LinkedList* ll_init()
 
 	// Assign 
 	list->head = NULL;
+	list->tail = NULL;
 	list->length = 0;
 
 	// Return pointer
@@ -29,53 +30,39 @@ LinkedList* ll_init()
 	Will push the string provided to the front of the list
 	1 -> Push successful
 	0 -> Failed to allocate memory
+   -1 -> Null Pointer(s) given
 */
-int ll_push(LinkedList* list, char* str)
+int ll_push(LinkedList* list, void* src, size_t n)
 {
 
-	// Calculate length of string
-	int len = 0;
-	for(;;len++)
-		if(str[len] == 0) break;
+	if(list == NULL || src == NULL)
+		return -1;
 
-	// Attempt allocation of data
+	// Attempt to allocate resources
 	Node* node = malloc(sizeof(Node));
-	char* node_str = calloc(1, len + 1);
-	if(node == NULL || str == NULL)
-		return 0; // Failed to allocate
+	void* payload = calloc(1, n);
+	if(node == NULL || payload == NULL)
+	{
+		// Other resource potentially successful alloc
+		if(node != NULL)free(node);
+		if(payload != NULL) free(payload);
+		return 0;
+	}
 
-	// Copy provided string into the node
-	node->str = node_str;
-	for(int i = 0; i < len; i++)
-		node_str[i] = str[i];
+	// Populate node
+	node->alloc = n;
+	node->payload = payload;
+	memcpy(payload, src, n);
 
-	// Link node into front of list
+	// Link node to head
 	node->next = list->head;
 	list->head = node;
 
-	list->length++;
-	return 1;
-
-}
-
-/**
-	Will let the user view the string at the head
-	1 - Success
-	0 - Empty List
-*/
-int ll_peek(LinkedList* list, char* out)
-{
-	
-	// Catch edge-case
+	// If list is empty link to tail
 	if(list->length == 0)
-		return 0;
+		list->tail = node;
 
-	if(out != NULL)
-	{
-		Node* head = list->head;
-		strcpy(out, head->str);
-	}
-
+	list->length++;
 	return 1;
 
 }
@@ -86,11 +73,10 @@ int ll_peek(LinkedList* list, char* out)
 	1 - Successful
 	0 - Empty List Error
 */
-int ll_pop(LinkedList* list, char* out)
+int ll_pop(LinkedList* list, void* dest)
 {
 
-	// Catch edge-case
-	if(list->length == 0)
+	if(list == NULL || list->length == 0)
 		return 0;
 
 	// Unlink head from list
@@ -98,13 +84,92 @@ int ll_pop(LinkedList* list, char* out)
 	list->head = to_des->next;
 
 	list->length--;
-	if(out != NULL)
-		strcpy(out, to_des->str);
+
+	// (Optionally) copy to dest
+	if(dest != NULL)
+		memcpy(dest, to_des->payload, to_des->alloc);
 
 	// Clear from memory
-	free(to_des->str);
+	free(to_des->payload);
 	free(to_des);
 
+	if(list->length == 0)
+		list->tail = NULL;
+
+	return 1;
+
+}
+
+/**
+	Will let the user view the string at the head
+	1 - Success
+	0 - Empty List
+   -1 - Null Pointer given
+*/
+int ll_peek(LinkedList* list, void* dest)
+{
+	
+	// Catch edge-case
+	if(list->length == 0)
+		return 0;
+
+	if(dest == NULL)
+		return -1;
+
+	Node* head = list->head;
+	memcpy(dest, head->payload, head->alloc);
+	return 1;
+
+}
+
+/**
+	Will return the size of the first node of the given list
+	-1 - Null Pointer given or empty list
+*/
+int ll_peek_size(LinkedList* list)
+{
+	if(list == NULL || list->length == 0)
+		return -1;
+
+	return list->head->alloc;
+}
+
+/**
+	Will append a node to the end of the list
+	1 - Success
+	0 - Memory Allocation failed
+   -1 - Invalid List given	
+*/
+int ll_append(LinkedList* list, void* src, size_t n)
+{
+	
+	if(list == NULL || src == NULL)
+		return -1;
+
+	// Attempt allocation of resources
+	Node* node = malloc(sizeof(Node));
+	void* payload = calloc(1, n);
+	if(node == NULL || payload == NULL)
+	{
+		// Free appropriate 
+		if(node != NULL) free(node);
+		if(payload != NULL) free(node);
+		return 0;
+	}
+
+	// Populate node
+	node->payload = payload;
+	node->alloc = n;
+	memcpy(payload, src, n);
+
+	// Link node into list
+	if(list -> length == 0)
+		list->head = node;
+	else 
+		list->tail->next = node;
+	list->tail = node;
+
+	list->length++;
 	return 1;
 
 }
@@ -114,7 +179,7 @@ int ll_pop(LinkedList* list, char* out)
 */
 int ll_isempty(LinkedList* list)
 {
-	return list->head == NULL;
+	return list->length == 0;
 }
 
 void ll_dispose(LinkedList* list)

@@ -1,61 +1,74 @@
 #include <stdio.h>
 
 /**
-    Will return an integer based on char input
+    Will return a truthy to determine if the provided
+    string is a number
     1 - Input is a number
     0 - Input is not a number
 */
-int is_number(char* str)
+int is_integer(char* str)
 {
-    if(str == NULL || str[0] == 0) // checking if input is empty
+
+    // Check if the given string is empty/null
+    if(str == NULL || str[0] == 0)
         return 0;
 
-    if(str[0] == '-' && str[1] == 0) // checking if the input isn't just '-'
+    // Checking the edge-case of a single hypen being given
+    if(str[0] == '-' && str[1] == 0)
         return 0;
 
-    int s = str[0] == '-' ? 1 : 0; // checking if first char is '-'
+    // Setting the start point to be after potential hypen
+    int start = str[0] == '-' ? 1 : 0;
     
-    for(int i = s;; i++) 
+    for(int i = start;; i++) 
     {
+
         if(str[i] == 0) break; // terminator
 
+        // Check if the current character is valid
         if(str[i] < '0' || str[i] > '9') 
-        {
             return 0;
-        }
+
     }
 
+    // If end reached has to be a number
     return 1;
 }
 
 /**
     Will convert a string to an integer
-    1 - Success
-    0 - Invalid Number
-   -1 - Empty String
+    value is then returned as is_integer can
+    be utilized for validating
 */
-int from_str(char* str, int* dest)
+int from_str(char* str)
 {
-    if(str == NULL || str[0] == 0) // checking if input is empty
+
+    // Edge case of empty string
+    if(str == NULL || str[0] == 0)
         return -1;
 
-    if(str[0] == '-' && str[1] == 0) // checking if the input isn't just '-'
-        return 0;
+    // Checking edge case of input being '-'
+    if(str[0] == '-' && str[1] == 0)
+        return -1;
 
-    int s = str[0] == '-' ? 1 : 0; 
-    char* cur = str+s; int out = 0; // skipping '-' at the beggining of input
-    while(*cur != 0)
+    int start = str[0] == '-' ? 1 : 0; 
+    char* cur = str+start; // skipping '-' at the beggining of input
+    int out = 0; 
+    while(*cur != 0) 
     {
+
+        // Check value (To avoid horrific errornous values)
         if(*cur < '0' || *cur > '9')
             return 0;
 
+        // Accomodate current char
         out *= 10;
         out += *(cur++) - '0';
     }
 
-    out *= s ? -1 : 1; // multiplying output by -1 if there is '-' at start of input
-    *dest = out;
-    return 1;
+    // Make output negative if str started with '-'
+    out *= start ? -1 : 1;
+    return out;
 }
 
 /**
@@ -65,24 +78,39 @@ int from_str(char* str, int* dest)
 void to_str(int x, char* dest)
 {
 
+    // Determine if val is negative
     int neg = x < 0 ? 1 : 0;
     if(neg) x *= -1;
 
-    char buff[32]; int idx = 30;
-    buff[31] = 0;
+    /*
+        Unsigned Integer is 32 bits, meaning a max value of
+        2^32 (4.29*10^9) Which will have a maximum of 10 digits
+        1 character for a '-' if negative and ending 0.
+        Maximum of 12 characters
+    */
+    char buff[12]; int idx = 30;
+    buff[11] = 0; // Set end to be 0
+    
     do{
+
+        // Take ending digit into string
         char offset = x % 10;
         buff[idx] = '0' + offset;
+        
+        // Adjust int value and index
         x -= offset;
         x /= 10;
         idx--;
+
     }while(x > 0);
 
+    // Shift index to include hypen
     if(neg)
         buff[idx] = '-';
     else
         idx++;
 
+    // Copy generated string to provided pointer
     char* new = buff+idx;
     for(int i = 0;;i++)
     {

@@ -1,38 +1,38 @@
 #include <stdio.h>
 
 #include "../src/Evaluator.h"
+#include "Test.h"
+
+void test_evaluator_valid();
 
 int main()
 {
 
-	int test_cases = 0, total = 4;
+	test_evaluator_valid();
+
+}
+
+void test_evaluator_valid()
+{
+
+	const int n = 3;
+	init_test_suite(n, "Testing Valid Cases", "Testing valid postfix expressions");
 
 	const const char* exprs[] =
 	{
 		"1 1 +",
 		"2 3 *",
-		"2 3 ^ 5 4 * / 10 +",
 		"1 3 * 2 + 6 -"
 	};
+	const int sols[] = {2, 6, -1};
 
-	const int sols[] =
+	for(int i = 0; i < 3; i++)
 	{
-		2, 6, 10, -1
-	};
-
-
-	// Run each test case
-	for(int i = 0; i < total; i++)
-	{
-		printf("Running Test Case [%02d/%02d]\n", i+1, total);
-
-		printf(">>> Evaluating: %s\n", exprs[i]);
-		printf(">>> Expected: %d\n", sols[i]);
-		int res; eval_postfix(exprs[i], &res);
-		printf(">>> Actual: %d\n", res);
-		if(res != sols[i])
-			printf(">>>>>> FAILURE\n");
-		printf("\n");
+		int result;
+		eval_postfix(exprs[i], &result);
+		assert_eq_int(sols[i], result);
 	}
+
+	terminate_test_suite();
 
 }

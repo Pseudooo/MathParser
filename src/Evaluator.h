@@ -1,3 +1,4 @@
+#include "util/LinkedList.h"
 #ifndef EVALUATOR_H
 #define EVALUATOR_H
 
