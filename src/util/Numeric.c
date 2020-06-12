@@ -35,6 +35,14 @@ int is_integer(char* str)
     return 1;
 }
 
+/*
+    Check if a given character is a digit or not
+*/
+int is_digit(char c)
+{
+    return c >= '0' && c <= '9' 
+}
+
 /**
     Will convert a string to an integer
     value is then returned as is_integer can
