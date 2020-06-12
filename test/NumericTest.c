@@ -4,6 +4,7 @@
 #include "Test.h"
 
 void test_is_integer();
+void test_is_digit();
 void test_from_str();
 void test_to_str();
 
@@ -11,7 +12,9 @@ int main()
 {
 
 	test_is_integer();
+	test_is_digit();
 	test_from_str();
+	test_to_str();
 
 }
 
@@ -29,6 +32,22 @@ void test_is_integer()
 	char* invalid_values[] = {"foo", "bar", "-", "1234f", "-1234f", "pp", "-f6", "help", "me", "pl0x"};
 	for(int i = 0; i < 10; i++)
 		assert_eq_int(0, is_integer(invalid_values[i]));
+
+	terminate_test_suite();
+
+}
+
+void test_is_digit()
+{
+
+	const int n = 10 + 26;
+	init_test_suite(n, "Validating Digits", "Checking if a provided character is a digit");
+
+	for(char c = '0'; c <= '9'; c++)
+		assert_eq_int(1, is_digit(c));
+
+	for(char c = 'a'; c <= 'z'; c++)
+		assert_eq_int(0, is_digit(c));
 
 	terminate_test_suite();
 
