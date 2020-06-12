@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "Numeric.h"
 
 /**
     Will return a truthy to determine if the provided
@@ -26,7 +27,7 @@ int is_integer(char* str)
         if(str[i] == 0) break; // terminator
 
         // Check if the current character is valid
-        if(!is_digit(str[i])); 
+        if(!is_digit(str[i])) 
             return 0;
 
     }
@@ -40,7 +41,7 @@ int is_integer(char* str)
 */
 int is_digit(char c)
 {
-    return c >= '0' && c <= '9' 
+    return !(c < '0' || c > '9');
 }
 
 /**
@@ -96,7 +97,7 @@ void to_str(int x, char* dest)
         1 character for a '-' if negative and ending 0.
         Maximum of 12 characters
     */
-    char buff[12]; int idx = 30;
+    char buff[12]; int idx = 11;
     buff[11] = 0; // Set end to be 0
     
     do{
