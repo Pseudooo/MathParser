@@ -50,7 +50,7 @@ void assert_eq_str(char* exp, char* act)
 	if(exp == NULL || act == NULL)
 		goto Failure;
 
-	for(int i = 0;;i++)
+	for(int i = 0;exp[i] != 0 && act[i] != 0;i++)
 		if(exp[i] != act[i]) goto Failure;
 
 	return;
