@@ -26,7 +26,7 @@ int is_integer(char* str)
         if(str[i] == 0) break; // terminator
 
         // Check if the current character is valid
-        if(str[i] < '0' || str[i] > '9') 
+        if(!is_digit(str[i])); 
             return 0;
 
     }
@@ -66,7 +66,7 @@ int from_str(char* str)
     {
 
         // Check value (To avoid horrific errornous values)
-        if(*cur < '0' || *cur > '9')
+        if(!is_digit(*cur))
             return 0;
 
         // Accomodate current char
