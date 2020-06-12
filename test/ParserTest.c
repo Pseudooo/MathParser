@@ -17,31 +17,40 @@ int main()
 void test_tokenizer()
 {
 
-    const int n = 5 + 8;
+    const int n = 4 + 3 + 9 + 12 + 9;
     init_test_suite(n, "Tokenizer", "Will tokenize a given string");
 
-    // Setup test values
-    char* expr1 = "1 + 1 * 1";
-    char* tokens1[] = {"1", "+", "1", "*", "1"};
-
-    LinkedList* list = ll_init();
-    tokenize(expr1, list);
-
-    char buffer[256];
-    for(int i = 0; i < 5; i++)
+    const char* test_exprs[] =
     {
-        ll_pop(list, buffer);
-        assert_eq_str(tokens1[i], buffer);
-    }
-
-    char* expr2 = "1+2  - 5*11/420";
-    char* tokens2[] = {"1", "+", "2", "-", "5", "*", "11", "/", "420"};
-    tokenize(expr2, list);
-    
-    for(int i = 0; i < 8; i++)
+        "1 + 1",
+        "1 + 2 - 3 * 5 / 6",
+        "(((1 + 2) * 3) / 4)",
+        "1    +(2 * 3   ) - 2"
+    };
+    const char* expr_toks[][13] =
     {
-        ll_pop(list, buffer);
-        assert_eq_str(tokens2[i], buffer);
+        {"1", "+", "1"},
+        {"1", "+", "2", "-", "3", "*", "5", "/", "6"},
+        {"(", "(", "(", "1", "+", "2", ")", "*", "3", ")", "/", "4", ")"},
+        {"1", "+", "(", "2", "*", "3", ")", "-", "2"}
+    };
+    const int expr_toks_count[] = {3, 9, 13, 9};
+
+    for(int i = 0; i < 4; i++)
+    {
+        LinkedList* tokens = ll_init();
+        tokenize(test_exprs[i], tokens);
+
+        char buffer[32];
+        for(int j = 0; j < expr_toks_count[i]; j++)
+        {
+            ll_pop(tokens, buffer);
+            assert_eq_str(expr_toks[i][j], buffer);
+        }
+
+        assert_eq_int(1, ll_isempty(tokens));
+
+        ll_dispose(tokens);
     }
 
     terminate_test_suite();
