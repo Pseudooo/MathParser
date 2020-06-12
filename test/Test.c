@@ -41,7 +41,7 @@ void assert_eq_int(int exp, int act)
 
 }
 
-void assert_eq_str(char* exp, char* act)
+void assert_eq_str(const char* exp, const char* act)
 {
 
 	printf("Running Test [%d/%d]\n", ++TEST_CASE, TEST_CASES);
