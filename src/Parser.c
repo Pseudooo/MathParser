@@ -21,51 +21,74 @@ int parse_infix_postfix(char* expr, char* dest)
     LinkedList* tokens = ll_init();
     tokenize(expr, tokens);
 
+    // We use a LL to build postfix expression
+    // then conform to one string at the end
     LinkedList* postfix_ll = ll_init();
+    /*
+        _technically this has no real advantage
+        given we don't care how long the output is
+        and we just assume there's enough space in
+        `dest`right now_
+    */
+
+    // Stack that'll be utilized by algo
     LinkedList* stack = ll_init();
 
+    // Add initial test
+    ll_append(tokens, ")", 2);
+    ll_push(tokens, "(", 2);
+
+    /*
+        The following is an implementation of the
+        "shunting yard algorithm"
+
+        It can be inspected in more detail here:
+        https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+    */
     while(!ll_isempty(tokens))
     {
 
-        // Take token from list
+        // Take the token from the head of the LL
         const int n = ll_peek_size(tokens);
         char tok[n];
         ll_pop(tokens, tok);
 
-        printf("Processing token: %s\n", tok);
-
         if(is_integer(tok))
         {
-            // Operands are added to expression
+            // Operands (Integer values in this case)
+            // are added straight to expression
             ll_append(postfix_ll, tok, n);
         }
         else if(tok[0] == '(')
         {
-            // Opening brackets are added to stack
+            // Opening brackets get pushed onto
+            // the stack
             ll_push(stack, tok, n);
         }
         else if(is_operator(tok))
         {
-            // Operators we check pop all operators of higher
-            // or equal precedence to the expression
-
-            // Take precedence of current operator
+            // Operators require us to pop all other operators
+            // from the stack and add them to the expression
+             
+            // Precedence of current token (operator)
             const int cur_prec = operator_prec(tok);
 
+            // Prepare a buffer to store other operators
+            // as they're moved from stack to expression
             char buffer[256];
             for(int i = 0; i < 256; i++)
                 buffer[i] = 0;
 
-            // Pop stack of all operators that are higher prec
+            // Keep popping until stack is emptpy or op is lower rec
             while(!ll_isempty(stack) && operator_prec(stack->head->payload) >= cur_prec)
             {
-                // Pop operator from stack onto expression
+                // Pop operator from stack to expression
                 const int size = ll_peek_size(stack);
                 ll_pop(stack, buffer);
                 ll_append(postfix_ll, buffer, size);
             }
 
-            // Add operator to stack
+            // Add current operator to stack
             ll_push(stack, tok, n);
 
         }
@@ -74,10 +97,12 @@ int parse_infix_postfix(char* expr, char* dest)
             // Closing brackets require us to pop all stack
             // elements until opening bracket is met
 
+            // Prepare a buffer to contain values that are checked
             char buffer[256];
             for(int i = 0; i < 256; i++)
                 buffer[i] = 0;
 
+            // Keep popping expression
             while(buffer[0] != '(')
             {
                 const int size = ll_peek_size(stack);
@@ -91,6 +116,7 @@ int parse_infix_postfix(char* expr, char* dest)
 
     }
 
+    // Stack and tokens are no longer required
     ll_dispose(stack);
     ll_dispose(tokens);
 
@@ -98,14 +124,20 @@ int parse_infix_postfix(char* expr, char* dest)
         Now the postfix expression exits with each term
         being its own element within `postfix_ll` so we
         are now going to convert this to be its own string
-
-        
     */
 
+    // Prepare **another** buffer to contain values
+    // as we move them
     char buffer[256];
     for(int i = 0; i < 256; i++)
         buffer[i] = 0;
 
+    /*
+        Currently has no consideration for the length of
+        the outputted string but we could compute this in
+        advance but we don't have control over the space
+        allocated at `dest`
+    */
     int head = 0;
     while(!ll_isempty(postfix_ll))
     {
@@ -123,7 +155,6 @@ int parse_infix_postfix(char* expr, char* dest)
     }
 
     ll_dispose(postfix_ll);
-
     return 1;
 
 }
