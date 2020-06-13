@@ -9,3 +9,4 @@ src/util/Operators.c=
 test/OperatorsTest.c=test/Test.c,src/util/Operators.c
 src/Parser.c=src/util/LinkedList.c,src/util/Numeric.c,src/util/Operators.c
 test/ParserTest.c=test/Test.c,src/Parser.c
+src/Main.c=src/Evaluator.c,src/Parser.c
