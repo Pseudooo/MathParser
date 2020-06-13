@@ -6,11 +6,13 @@
 #include <stdio.h>
 
 void test_tokenizer();
+void test_parse_infix_postfix();
 
 int main()
 {
 
     test_tokenizer();
+    test_parse_infix_postfix();
 
 }
 
@@ -54,5 +56,42 @@ void test_tokenizer()
     }
 
     terminate_test_suite();
+
+}
+
+void test_parse_infix_postfix()
+{
+
+    const int n = 4;
+    init_test_suite(n, "Infix to Postfix", "Converting an Infix Expression to Postfix");
+
+    char* infix_exprs[] =
+    {
+        "1 + 1",
+        "420 * 120 + 1",
+        "69 + 69 * 69 - 69 / 69",
+        "123456 + (1 - 2 * (3 / 2 * 3 + (2 - 2 * 2)))"
+    };
+    const const char* postfix_exprs[] =
+    {
+        "1 1 +",
+        "420 120 * 1 +",
+        "69 69 69 * + 69 69 / -",
+        "123456 1 2 3 2 / 3 * 2 2 2 * - + * - +"
+    };
+
+    for(int i = 0; i < 4; i++)
+    {
+        char buffer[512];
+        for(int j = 0; j < 512; j++)
+            buffer[j] = 0;
+
+        parse_infix_postfix(infix_exprs[i], buffer);
+        assert_eq_str(postfix_exprs[i], buffer);
+    }
+
+    terminate_test_suite();
+
+    assert_eq_str("str1", "str1 ");
 
 }
