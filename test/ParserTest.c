@@ -92,6 +92,4 @@ void test_parse_infix_postfix()
 
     terminate_test_suite();
 
-    assert_eq_str("str1", "str1 ");
-
 }
