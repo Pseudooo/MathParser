@@ -34,7 +34,7 @@ int parse_infix_postfix(char* expr, char* dest)
     // Stack that'll be utilized by algo
     LinkedList* stack = ll_init();
 
-    // Add initial test
+    // Add brackets around expression
     ll_append(tokens, ")", 2);
     ll_push(tokens, "(", 2);
 
