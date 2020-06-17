@@ -11,9 +11,10 @@ void buffer_extend(char* buffer, char c);
 /*
     Parse a provided expression from infix to postfix
     which can then be evaluated by the evaluator
-        TODO:
-            - refactor code heavily
-            - make robust to catch invalid expressions
+    
+    1 -> Successful Parse
+    0 -> Missing closing bracket `)`
+   -1 -> Invalid Token
 */
 int parse_infix_postfix(char* expr, char* dest)
 {
@@ -105,6 +106,11 @@ int parse_infix_postfix(char* expr, char* dest)
             // Keep popping expression
             while(buffer[0] != '(')
             {
+
+                // Catch edge case of mis-aligned brackets
+                if(ll_isempty(stack))
+                    return 0;
+
                 const int size = ll_peek_size(stack);
                 ll_pop(stack, buffer);
 
@@ -112,6 +118,11 @@ int parse_infix_postfix(char* expr, char* dest)
                     ll_append(postfix_ll, buffer, size);
             }
 
+        }
+        else
+        {
+            // Invalid Token has been encountered
+            return -1;   
         }
 
     }
