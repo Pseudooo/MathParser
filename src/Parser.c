@@ -13,7 +13,7 @@ void buffer_extend(char* buffer, char c);
     which can then be evaluated by the evaluator
     
     1 -> Successful Parse
-    0 -> Missing closing bracket `)`
+    0 -> Missing opening bracket `(`
    -1 -> Invalid Token
 */
 int parse_infix_postfix(char* expr, char* dest)
