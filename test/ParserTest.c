@@ -6,13 +6,15 @@
 #include <stdio.h>
 
 void test_tokenizer();
-void test_parse_infix_postfix();
+void test_parse_infix_postfix_valid();
+void test_parse_infix_postfix_invalid();
 
 int main()
 {
 
     test_tokenizer();
-    test_parse_infix_postfix();
+    test_parse_infix_postfix_valid();
+    test_parse_infix_postfix_invalid();
 
 }
 
@@ -59,7 +61,7 @@ void test_tokenizer()
 
 }
 
-void test_parse_infix_postfix()
+void test_parse_infix_postfix_valid()
 {
 
     const int n = 4;
@@ -80,15 +82,37 @@ void test_parse_infix_postfix()
         "123456 1 2 3 2 / 3 * 2 2 2 * - + * - +"
     };
 
-    for(int i = 0; i < 4; i++)
-    {
-        char buffer[512];
-        for(int j = 0; j < 512; j++)
-            buffer[j] = 0;
+    char buffer[512];
+    for(int i = 0; i < 512; i++)
+        buffer[i] = 0;
 
+    for(int i = 0; i < n; i++)
+    {
         parse_infix_postfix(infix_exprs[i], buffer);
         assert_eq_str(postfix_exprs[i], buffer);
     }
+
+    terminate_test_suite();
+
+}
+
+void test_parse_infix_postfix_invalid()
+{
+
+    const int n = 2;
+    init_test_suite(n, "Invalid Expression Parsing", "Attempting to parse an invalid expression");
+
+    char* infix_exprs[] =
+    {
+        "1 + 1",
+        "1 1 a",
+        "1 + ( 1 - 2"
+    };
+    int results[] = {1 ,-1, 0};
+
+    char buffer[512];
+    for(int i = 0; i < n; i++)
+        assert_eq_int(results[i], parse_infix_postfix(infix_exprs[i], buffer));
 
     terminate_test_suite();
 
