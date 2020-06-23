@@ -99,14 +99,14 @@ void test_parse_infix_postfix_valid()
 void test_parse_infix_postfix_invalid()
 {
 
-    const int n = 2;
+    const int n = 3;
     init_test_suite(n, "Invalid Expression Parsing", "Attempting to parse an invalid expression");
 
     char* infix_exprs[] =
     {
         "1 + 1",
         "1 1 a",
-        "1 + ( 1 - 2"
+        "1 + ) 1 - 2"
     };
     int results[] = {1 ,-1, 0};
 
