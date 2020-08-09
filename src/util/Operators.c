@@ -9,6 +9,8 @@ int DIV(int x1, int x2);
 
 const int OPERATOR_COUNT = 4;
 const char* OPERATOR_STR[] = {"+", "-", "*", "/"};
+const int OPERATOR_PREC[] = {5, 5, 6,  6};
+
 const int (*ops[]) (int x1, int x2) = {ADD, SUB, MUL, DIV};
 
 /*
@@ -27,6 +29,19 @@ int is_operator(const char* str)
     // (That's been registered)
     return 0;
 
+}
+
+/*
+    Function to give the precedence of a given
+    operator
+*/
+int operator_prec(const char* str)
+{
+    for(int i = 0; i < OPERATOR_COUNT; i++)
+        if(strcmp(OPERATOR_STR[i], str) == 0)
+            return OPERATOR_PREC[i];
+
+    return 0;
 }
 
 /*

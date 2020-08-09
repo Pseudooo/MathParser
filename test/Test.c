@@ -41,7 +41,7 @@ void assert_eq_int(int exp, int act)
 
 }
 
-void assert_eq_str(char* exp, char* act)
+void assert_eq_str(const char* exp, const char* act)
 {
 
 	printf("Running Test [%d/%d]\n", ++TEST_CASE, TEST_CASES);
@@ -51,7 +51,11 @@ void assert_eq_str(char* exp, char* act)
 		goto Failure;
 
 	for(int i = 0;;i++)
-		if(exp[i] != act[i]) goto Failure;
+	{
+		if(exp[i] == 0 && act[i] == 0) return;
+		else if(exp[i] != act[i]) goto Failure;
+	}
+
 
 	return;
 
